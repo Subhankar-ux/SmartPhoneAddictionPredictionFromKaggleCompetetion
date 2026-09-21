@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Smartphone addiction risk assessment powered by machine learning.">
+  <title>ScreenSense — Smartphone Addiction Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-mark">S</span>
+      <span>ScreenSense</span>
+    </a>
+    <span class="model-badge"><span class="status-dot"></span> ML-powered assessment</span>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">SMARTPHONE HABITS · PERSONAL SNAPSHOT</div>
+      <h1>Understand your screen habits<br><em>without the guesswork.</em></h1>
+      <p class="hero-copy">
+        Enter a few details about your daily routine. Your trained XGBoost model
+        will estimate the likelihood of smartphone addiction based on the patterns provided.
+      </p>
+    </section>
+
+    <section class="app-grid">
+      <form id="assessmentForm" class="card form-card" novalidate>
+        <div class="card-heading">
+          <div>
+            <span class="step-label">01 — YOUR ROUTINE</span>
+            <h2>Daily usage</h2>
+          </div>
+          <span class="progress-text" id="progressText">0 / 12</span>
+        </div>
+
+        <div class="progress-track"><span id="progressBar"></span></div>
+
+        <div class="fields">
+          <label class="field">
+            <span>Age</span>
+            <input id="age" name="age" type="number" min="10" max="100" step="1" placeholder="e.g. 24" required>
+          </label>
+
+          <label class="field">
+            <span>Daily screen time <small>hours</small></span>
+            <input id="daily_screen_time_hours" name="daily_screen_time_hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 6.5" required>
+          </label>
+
+          <label class="field">
+            <span>Social media <small>hours/day</small></span>
+            <input id="social_media_hours" name="social_media_hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 2.5" required>
+          </label>
+
+          <label class="field">
+            <span>Gaming <small>hours/day</small></span>
+            <input id="gaming_hours" name="gaming_hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 1.5" required>
+          </label>
+
+          <label class="field">
+            <span>Work / study <small>hours/day</small></span>
+            <input id="work_study_hours" name="work_study_hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 7" required>
+          </label>
+
+          <label class="field">
+            <span>Sleep <small>hours/day</small></span>
+            <input id="sleep_hours" name="sleep_hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 7.5" required>
+          </label>
+
+          <label class="field">
+            <span>Notifications <small>per day</small></span>
+            <input id="notifications_per_day" name="notifications_per_day" type="number" min="0" max="1000" step="1" placeholder="e.g. 80" required>
+          </label>
+
+          <label class="field">
+            <span>App opens <small>per day</small></span>
+            <input id="app_opens_per_day" name="app_opens_per_day" type="number" min="0" max="1000" step="1" placeholder="e.g. 90" required>
+          </label>
+
+          <label class="field">
+            <span>Weekend screen time <small>hours/day</small></span>
+            <input id="weekend_screen_time" name="weekend_screen_time" type="number" min="0" max="24" step="0.1" placeholder="e.g. 8" required>
+          </label>
+
+          <label class="field select-field">
+            <span>Gender</span>
+            <select id="gender" name="gender" required>
+              <option value="" selected disabled>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <label class="field select-field">
+            <span>Stress level</span>
+            <select id="stress_level" name="stress_level" required>
+              <option value="" selected disabled>Select</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </label>
+
+          <label class="field select-field">
+            <span>Academic / work impact</span>
+            <select id="academic_work_impact" name="academic_work_impact" required>
+              <option value="" selected disabled>Select</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-footer">
+          <p class="privacy-note"><span>⌁</span> No account required. Your inputs are sent only when you run the assessment.</p>
+          <button id="predictBtn" type="submit">
+            <span class="button-text">Run assessment</span>
+            <span class="button-loader" aria-hidden="true"></span>
+            <span class="button-arrow">→</span>
+          </button>
+        </div>
+      </form>
+
+      <aside class="card result-card" id="resultCard">
+        <div class="result-top">
+          <span class="step-label">02 — MODEL OUTPUT</span>
+          <span class="live-pill" id="livePill">READY</span>
+        </div>
+
+        <div class="result-empty" id="resultEmpty">
+          <div class="orbit">
+            <div class="orbit-core">S</div>
+          </div>
+          <h3>Your result will appear here</h3>
+          <p>Complete the assessment and let the model analyze your usage pattern.</p>
+        </div>
+
+        <div class="result-content hidden" id="resultContent">
+          <div class="score-ring" id="scoreRing">
+            <div>
+              <strong id="probability">0%</strong>
+              <span>estimated risk</span>
+            </div>
+          </div>
+
+          <div class="result-label" id="resultLabel">—</div>
+          <p class="result-description" id="resultDescription"></p>
+
+          <div class="metric">
+            <div class="metric-row">
+              <span>Model probability</span>
+              <strong id="probabilityText">0%</strong>
+            </div>
+            <div class="metric-track"><span id="metricBar"></span></div>
+          </div>
+
+          <div class="threshold-box">
+            <span>Decision threshold</span>
+            <strong id="thresholdText">—</strong>
+          </div>
+
+          <button class="reset-btn" id="resetBtn" type="button">Start another assessment <span>↗</span></button>
+        </div>
+
+        <div class="error-box hidden" id="errorBox">
+          <strong>Couldn’t reach the model.</strong>
+          <p id="errorMessage">Check that the FastAPI server is running and the API URL is correct.</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <span>ScreenSense</span>
+      <span>Prediction is an ML estimate, not a medical diagnosis.</span>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
