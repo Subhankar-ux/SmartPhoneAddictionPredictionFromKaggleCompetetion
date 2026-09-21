@@ -6,16 +6,20 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+
+# Get the absolute directory where main.py is located
+BASE_DIR = Path(__file__).resolve().parent
 
 # 1. Load artifacts at server startup
-preprocessor = joblib.load("tree_preprocessor.pkl")
+preprocessor = joblib.load(BASE_DIR /"tree_preprocessor.pkl")
 
 ml_model = {}
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
-    ml_model['model'] = joblib.load('best_xgb_model.pkl')
-    ml_model['threshold'] = joblib.load("threshold.pkl")
+    ml_model['model'] = joblib.load(BASE_DIR /'best_xgb_model.pkl')
+    ml_model['threshold'] = joblib.load(BASE_DIR /"threshold.pkl")
     print("Loading models...")
     yield
     
