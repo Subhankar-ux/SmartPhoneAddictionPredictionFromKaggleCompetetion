@@ -29,4 +29,72 @@ XGBoost
  ↓
 Optuna Optimization
  ↓
-K-Fold Cross
+K-Fold Cross-Validation
+ ↓
+Threshold Optimization
+ ↓
+FastAPI
+ ↓
+Web Interface
+
+
+📊 Performance
+Metric              Score
+My Kaggle ROC-AUC   0.9667
+Competition Leader  0.9710
+
+The model achieved a ROC-AUC score very close to the top competition result.
+
+🌐 Application
+The trained model is exposed through a FastAPI REST API.
+Endpoint : 
+POST /predict
+The API accepts user information such as:
+Age
+Daily screen time
+Social media usage
+Gaming hours
+Sleep hours
+Notifications per day
+App opens per day
+Stress level
+Academic/work impact
+
+and returns the predicted addiction status along with the prediction probability.
+
+💻 Run Locally
+Clone the repository : git clone https://github.com/YOUR_USERNAME/ScreenSense.git
+cd ScreenSense
+Install dependencies :
+pip install -r requirements.txt
+Start FastAPI :
+uvicorn main:app --reload
+API:
+http://127.0.0.1:8000
+Swagger documentation:
+http://127.0.0.1:8000/docs
+
+📁 Project Structure
+ScreenSense/
+├── backend/
+│   ├── main.py
+│   ├── best_xgb_model.pkl
+│   ├── tree_preprocessor.pkl
+│   └── threshold.pkl
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+|
+│
+└── README.md
+
+
+🔮 Future Improvements : 
+   -> SHAP-based model explainability
+   -> Personalized recommendations
+   -> Model monitoring
+   -> Improved UI/UX
+   -> CI/CD integration
